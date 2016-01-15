@@ -2,7 +2,10 @@ var express = require('express');
 var redis = require('redis');
 var init = require('./init');
 
+var cors = require('cors');
+
 var routes = require('./routes/index');
+var api = require('./routes/api');
 
 var client = redis.createClient();
 var client2 = redis.createClient();
@@ -14,7 +17,10 @@ var io = require('socket.io')(http);
 
 init.createApp(app);
 
+app.use(cors());
+
 app.use('/', routes);
+app.use('/api', api);
 
 init.enableErrorHandlers(app);
 
@@ -44,7 +50,7 @@ process.on('SIGTERM', function () {
 
 // socket.io
 io.on('connection', function(socket){
-  //console.log(socket);
+  console.log('socket connected:',socket);
   socket.on('chat message', function(msg){
     client.publish('chat', msg);
     console.log('Received chat message - client:'+msg);
