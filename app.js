@@ -6,6 +6,7 @@ var cors = require('cors');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
+var auth = require('./routes/auth');
 
 var client = redis.createClient();
 var client2 = redis.createClient();
@@ -21,6 +22,7 @@ app.use(cors());
 
 app.use('/', routes);
 app.use('/api', api);
+app.use('/auth', auth);
 
 init.enableErrorHandlers(app);
 
